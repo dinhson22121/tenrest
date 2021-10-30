@@ -47,3 +47,25 @@ $('#upload').change(function (){
         }
     })
 })
+
+$('#upload').change(function (){
+    const form = new FormData();
+    form.append('file',$(this)[0].files[0]);
+    $.ajax({
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        dataTable: 'JSON',
+        data: form,
+        url: '/user/upload/services',
+        success:function (results){
+            console.log(results.url)
+            if (results.error === false){
+                $('#image_show').html('<a href="'+results.url+'" target="_blank">' +
+                    '<img src="'+results.url+'"  width="200px"></a>');
+
+                $('#file').val(results.url);
+            }else alert("Upload file bị lỗi");
+        }
+    })
+})

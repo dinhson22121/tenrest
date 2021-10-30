@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
+use App\Http\Service\UI\UIService;
 use App\Models\c;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+
 
 
 class LoginController extends Controller
@@ -18,9 +20,50 @@ class LoginController extends Controller
      */
     public function index()
     {
-       return  view("admin.users.login",[
-           "title"=>'Đăng nhập hệ thống'
-       ]);
+        return view('admin.users.login',[
+            'title' =>'Đăng nhập hệ thống'
+        ]);
+    }
+
+    protected $uiservice;
+    public function __construct(UIService $uiservice)
+    {
+        $this->uiservice = $uiservice;
+    }
+
+    public function store(Request $request)
+    {
+        $this->validate($request,[
+            'email' => 'required',
+            'password' =>'required'
+            ]);
+
+        if (Auth::attempt([
+                'email'=> $request->input('email'),
+                'password' => $request->input('password'),
+                'Is_admin' =>'1',
+            ],$request->input('remember')))
+        {
+            Session::put('email', $request->input('email'));
+            Session::put('Is_admin', $request->input('Is_admin'));
+            return  redirect('/admin');
+        }
+
+        else if (Auth::attempt([
+                'email'=> $request->input('email'),
+                'password' => $request->input('password'),
+                'Is_admin' =>'0',
+            ],$request->input('remember')))
+        {
+            Session::put('email', $request->input('email'));
+            Session::put('Is_admin', $request->input('Is_admin'));
+                 return redirect("/user/main");
+        }
+        else {
+            Session::flash('error', 'Tên đăng nhập hoặc Mật khẩu không đúng');
+            return redirect()->back();
+        }
+
     }
 
     /**
@@ -39,20 +82,7 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-   public function store(Request $request)
-   {
-       $this->validate($request,[
-           'email' =>'required|email',
-           'password' => 'required'
-       ]);
-       $credentials = $request->only('email', 'password');
-       if (Auth::attempt($credentials, $request->input('remember'))) {
-            return redirect()->route('admin');
-       }
-       Session::flash('error', "Email hoặc Passwork không đúng");
-       Session::flash('success', "Email hoặc Passwork không đúng");
-       return redirect()->back();
-   }
+
 
     /**
      * Display the specified resource.
@@ -98,5 +128,4 @@ class LoginController extends Controller
     {
         //
     }
-
 }

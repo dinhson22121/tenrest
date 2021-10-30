@@ -7,7 +7,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="../../index2.html"><b>Admin</b></a>
+        <a href="../../index2.html"><b>Đăng nhập</b></a>
     </div>
     <!-- /.login-logo -->
     <div class="card">
@@ -16,7 +16,7 @@
                 @include('admin.alert')
             <form action="/admin/users/login/store" method="post">
                 <div class="input-group mb-3">
-                    <input type="email" name="email" class="form-control" placeholder="Email">
+                    <input type="text" name="email" class="form-control" placeholder="Nhập tên đăng nhập">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    <input type="password" name="password" class="form-control" placeholder="Password">
+                    <input type="password" name="password" class="form-control" placeholder="Nhập mật khẩu">
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -42,7 +42,10 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-4">
-                        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                        <button type="submit" class="btn btn-primary btn-block" style="width: 100px;">Đăng nhập</button>
+                    </div>
+                    <div class="col-6">
+                        <a href="http://res.test/user/users/register" class="text-center" >Đăng kí</a>
                     </div>
                     <!-- /.col -->
                 </div>

@@ -1,28 +1,39 @@
 <?php
 
-
-
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\MainController;
-use App\Http\Controllers\Admin\Users\LoginController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\ProductController;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\Admin\Users\RegisterController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Users\LoginController;
+use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\UIController;
+use App\Http\Controllers\Admin\UserController;
 
-Route::get('admin/users/login',[LoginController::class, 'index'])->name("login");
-Route::post("admin/users/login/store",[LoginController::class,'store']);
+Route::get('/', function () {
+    return view('welcome');
+});
+
+    Route::get('admin/users/login',[LoginController::class,'index']);
+    Route::post('admin/users/login/store',[LoginController::class,'store']);
+
+    Route::get('user/users/register',[RegisterController::class,'index2']);
+    Route::post('user/users/register',[RegisterController::class,'store2']);
 
 Route::middleware(['auth'])->group(function (){
-#Admin
+
+    Route::prefix('user')->group(function (){
+
+        Route::get('/',[UserController::class,'index'])->name('user');
+        Route::get('/main',[UserController::class,'index']);
+
+        Route::get('UI/update',[UIController::class,'update']);
+        Route::post('UI/update',[UIController::class,'store']);
+
+        Route::post('upload/services',[\App\Http\Controllers\Admin\UpAvatarController::class,'store']);
+
+    });
+
+    #Admin
     Route::prefix('admin')->group(function (){
         Route::get('/',[MainController::class,'index'])->name('admin');
         Route::get('main',[MainController::class,'index']);
@@ -52,5 +63,13 @@ Route::middleware(['auth'])->group(function (){
         #Upload
         Route::post('upload/services',[\App\Http\Controllers\Admin\UploadController::class,'store']);
     });
+
+
+
 });
+
+Route::get("/",);
+
+
+
 
